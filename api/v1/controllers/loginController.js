@@ -25,4 +25,23 @@ router.get(
   }
 );
 
+router.get(
+  "/github",
+  passport.authenticate("github", { scope: ["user:email"] })
+);
+
+router.get(
+  "/github/callback",
+  passport.authenticate("github", {
+    session: false,
+  }),
+  async (req, res) => {
+    try {
+      console.log("GitHub Auth Success", req.user);
+      res.redirect(`http://localhost:5000/api/v1/employees`);
+    } catch (err) {
+      console.log("GitHub Auth Error", err);
+    }
+  }
+);
 export default router;
